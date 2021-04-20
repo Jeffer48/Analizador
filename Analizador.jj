@@ -1,0 +1,179 @@
+PARSER_BEGIN(Analizador)
+    public class Analizador {
+        public static void main(String args[]) throws ParseException {
+            Analizador analizador = new Analizador(System.in);analizador.Inicio();
+    }   
+}
+PARSER_END(Analizador)
+SKIP : {  " "| "\t"| "\n"| "\r"}
+
+SKIP:
+{
+ "/*":DentroComentario
+}
+<DentroComentario> SKIP:
+{
+"*/" : DEFAULT
+}
+<DentroComentario> MORE:
+{
+ <~ [ ] >
+}
+
+SKIP:
+{
+ "//":DentroComentario2
+}
+<DentroComentario2> SKIP:
+{
+"\n" : DEFAULT
+}
+<DentroComentario2> MORE:
+{
+ <~ [ ] >
+}
+
+TOKEN :{
+    < If: ["i"]["f"] > {System.out.println("Encontre un if en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN :{
+    < Else: ["e"]["l"]["s"]["e"] > {System.out.println("Encontre un else en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN :{
+    < While: ["w"]["h"]["i"]["l"]["e"] > {System.out.println("Encontre un while en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN :{
+    < Void: ["v"]["o"]["i"]["d"] > {System.out.println("Encontre un void en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN :{
+    < Main: ["m"]["a"]["i"]["n"] > {System.out.println("Encontre un main en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN :{
+    < Return: ["r"]["e"]["t"]["u"]["r"]["n"] > {System.out.println("Encontre un return en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN :{
+    < Int: ["i"]["n"]["t"] > {System.out.println("Encontre un int en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN :{
+    < Float: ["f"]["l"]["o"]["a"]["t"] > {System.out.println("Encontre un main en la linea: " + matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<OPDIF: "!="> {System.out.println("Encontre operador desigual"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<OPASIG: "="> {System.out.println("Encontre operador asignativo"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<PUNCOMA: ";"> {System.out.println("Encontre un punto y coma"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<OPCOMA: ","> {System.out.println("Encontre una coma"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<PARIZ: "("> {System.out.println("Encontre un parentesis izquierdo"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<PARDER: ")"> {System.out.println("Encontre un parentesis derecho"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<CORIZ: "["> {System.out.println("Encontre un corchete izquierdo"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<CORDER: "]"> {System.out.println("Encontre un corchete derecho"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<SIMBNOVALIDO: "~"|"["|"]"|"$"|"´"|"&"|"#"|"%"|"^"> {System.out.println("Encontre un simbolo no valido, en la linea:" + matchedToken.beginLine);}  
+}
+
+TOKEN:
+{
+<IDNOVALIDO: (["0"-"9"])+(["a"-"z"]|["A"-"Z"]){1}(["a"-"z"]|["A"-"Z"]|["0"-"9"])*> {System.out.println("Error lexico ID invalido en la linea: "+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<NUMNOVALIDO: ["."](["0"-"9"])+> {System.out.println("Error lexico numero decimal invalido en la linea: "+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<LLAVIZ: "{"> {System.out.println("Encontre una llave izquierda"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<LLAVDER: "}"> {System.out.println("Encontre una llave derecha"+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<ID: (["a"-"z"]|["A"-"Z"]){1}(["a"-"z"]|["A"-"Z"]|["0"-"9"])*> {System.out.println("Encontre un ID "+image +" en la linea: "+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<NUM: ["0"-"9"](["0"-"9"])*|((["0"-"9"])+"."(["0"-"9"])+)> {System.out.println("Encontre un numero "+image +" en la linea: "+ matchedToken.beginLine);}
+}
+
+TOKEN:{
+    <OPSUMA: "+"> {System.out.println("Encontre un operador suma, en la linea:" + matchedToken.beginLine);}
+}
+TOKEN:{
+    <OPRESTA: "-"> {System.out.println("Encontre un operador resta, en la linea:" + matchedToken.beginLine);}
+}
+TOKEN:{
+    <OPMULTIPLICA: "*"> {System.out.println("Encontre un operador de multiplicacion, en la linea:" + matchedToken.beginLine);}
+}
+TOKEN:{
+    <OPDIV: "/"> {System.out.println("Encontre un operador division, en la linea:" + matchedToken.beginLine);}
+}
+TOKEN:{
+    <OPMENOR: "<"> {System.out.println("Encontre un operador menor que, en la linea:" + matchedToken.beginLine);}
+}
+TOKEN:{
+    <OPMENORIGUAL: "<="> {System.out.println("Encontre un operador menor igual, en la linea:" + matchedToken.beginLine);}
+}
+TOKEN:{
+    <OPMAYOR: ">"> {System.out.println("Encontre un operador mayor que, en la linea:" + matchedToken.beginLine);}   
+}
+TOKEN:{
+    <OPMAYORIGUAL: ">="> {System.out.println("Encontre un operador mayor igual, en la linea:" + matchedToken.beginLine);}   
+}
+TOKEN:
+{
+    <OPIGUALIGUAL: "=="> {System.out.println("Encontre un operador igual igual, en la linea:" + matchedToken.beginLine);}   
+}
+
+
+
+SKIP:   {<~[]>}
+void Inicio() :{}
+{
+    (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|
+    <OPSUMA>|<OPRESTA>|<OPMULTIPLICA>|<OPDIV>|<OPMENOR>|<OPMENORIGUAL>|<OPMAYOR>|<OPMAYORIGUAL>|<OPIGUALIGUAL>|<SIMBNOVALIDO>|<IDNOVALIDO>|<NUMNOVALIDO>)+<EOF>
+}
