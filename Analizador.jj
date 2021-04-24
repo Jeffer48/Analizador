@@ -137,7 +137,12 @@ TOKEN:
 
 TOKEN:
 {
-<NUM: ["0"-"9"](["0"-"9"])*|((["0"-"9"])+"."(["0"-"9"])+)> {System.out.println("Encontre un numero "+image +" en la linea: "+ matchedToken.beginLine);}
+<NUM: ["0"-"9"](["0"-"9"])*> {System.out.println("Encontre un numero "+image +" en la linea: "+ matchedToken.beginLine);}
+}
+
+TOKEN:
+{
+<NUMDEC: ((["0"-"9"])+"."(["0"-"9"])+)> {System.out.println("Encontre un numero decimal "+image +" en la linea: "+ matchedToken.beginLine);}
 }
 
 TOKEN:{
@@ -174,6 +179,6 @@ TOKEN:
 SKIP:   {<~[]>}
 void Inicio() :{}
 {
-    (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|
+    (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|<NUMDEC>|
     <OPSUMA>|<OPRESTA>|<OPMULTIPLICA>|<OPDIV>|<OPMENOR>|<OPMENORIGUAL>|<OPMAYOR>|<OPMAYORIGUAL>|<OPIGUALIGUAL>|<SIMBNOVALIDO>|<IDNOVALIDO>|<NUMNOVALIDO>)+<EOF>
 }
