@@ -177,6 +177,67 @@ TOKEN:
 
 
 SKIP:   {<~[]>}
+
+void program() :{}
+{
+    (declarationlist()) + <EOF>
+}
+
+void declarationlist() :{}
+{
+    declaration() declarationlistPrima()
+}
+
+void declarationlistPrima() :{}
+{
+    declaration() declarationlistPrima() | (declarationlistPrima())* 
+}
+
+void declaration() :{}
+{
+    vardeclaration() fundeclaration()
+}
+
+void vardeclaration() :{}
+{
+    typespecifer() <ID> <PUNCOMA> | typespecifer() <ID> <CORIZ> <NUM> <CORDER> <PUNCOMA>
+}
+
+void typespecifer() :{}
+{
+    <Int> | <Void>
+}
+
+void fundeclaration() :{}
+{
+    typespecifer() <ID> <PARIZ> params() <PARDER> compoundstmt()
+}
+
+void params() :{}
+{
+    paramlist() | <Void>
+}
+
+void paramlist() :{}
+{
+    param()
+}
+
+void paramlistPrima() :{}
+{
+    <OPCOMA> param() paramlistPrima() | (paramlistPrima())*
+}
+
+void param() :{}
+{
+    typespecifer() <ID> | typespecifer() <ID> <CORIZ> <CORDER>
+}
+
+void compoundstmt() :{}
+{
+    <LLAVIZ> localdeclarations() statementlist() <LLAVDER>
+}
+
 void Inicio() :{}
 {
     (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|<NUMDEC>|
