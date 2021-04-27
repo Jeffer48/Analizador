@@ -107,11 +107,6 @@ TOKEN:
 
 TOKEN:
 {
-<SIMBNOVALIDO: "~"|"["|"]"|"$"|"´"|"&"|"#"|"%"|"^"> {System.out.println("Encontre un simbolo no valido, en la linea:" + matchedToken.beginLine);}  
-}
-
-TOKEN:
-{
 <IDNOVALIDO: (["0"-"9"])+(["a"-"z"]|["A"-"Z"]){1}(["a"-"z"]|["A"-"Z"]|["0"-"9"])*> {System.out.println("Error lexico ID invalido en la linea: "+ matchedToken.beginLine);}
 }
 
@@ -174,9 +169,10 @@ TOKEN:
     <OPIGUALIGUAL: "=="> {System.out.println("Encontre un operador igual igual, en la linea:" + matchedToken.beginLine);}   
 }
 
-
-
-SKIP:   {<~[]>}
+SPECIAL_TOKEN:   
+{
+<SIMBNOVALIDO: ~[]> {System.out.println("Encontre un simbolo no valido, en la linea:" + matchedToken.beginLine);} 
+}
 
 void program() :{}
 {
@@ -220,7 +216,7 @@ void params() :{}
 
 void paramlist() :{}
 {
-    param()
+    param() paramlistPrima()
 }
 
 void paramlistPrima() :{}
@@ -241,5 +237,5 @@ void compoundstmt() :{}
 void Inicio() :{}
 {
     (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|<NUMDEC>|
-    <OPSUMA>|<OPRESTA>|<OPMULTIPLICA>|<OPDIV>|<OPMENOR>|<OPMENORIGUAL>|<OPMAYOR>|<OPMAYORIGUAL>|<OPIGUALIGUAL>|<SIMBNOVALIDO>|<IDNOVALIDO>|<NUMNOVALIDO>)+<EOF>
+    <OPSUMA>|<OPRESTA>|<OPMULTIPLICA>|<OPDIV>|<OPMENOR>|<OPMENORIGUAL>|<OPMAYOR>|<OPMAYORIGUAL>|<OPIGUALIGUAL>|<IDNOVALIDO>|<NUMNOVALIDO>)+<EOF>
 }
