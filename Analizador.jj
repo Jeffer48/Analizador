@@ -246,12 +246,12 @@ void localdeclarationsPrima() :{}
 
 void statementlist() :{}
 {
-    statementlistPrima();
+    statementlistPrima()
 }
 
 void statementlistPrima() :{}
 {
-    statement() statementlistPrima(); | (statementlistPrima())*
+    statement() statementlistPrima() | (statementlistPrima())*
 }
 
 void statement() :{}
@@ -281,7 +281,7 @@ void returnstmt() :{}
 
 void expression() :{}
 {
-    var() <OPASIG> expression() | simpleExpression();
+    var() <OPASIG> expression() | simpleExpression()
 }
 
 void var() :{}
