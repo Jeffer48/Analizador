@@ -234,6 +234,66 @@ void compoundstmt() :{}
     <LLAVIZ> localdeclarations() statementlist() <LLAVDER>
 }
 
+void localdeclarations() :{}
+{
+    localdeclarationsPrima()
+}
+
+void localdeclarationsPrima() :{}
+{
+    vardeclaration() localdeclarationsPrima() | (localdeclarationsPrima())*
+}
+
+void statementlist() :{}
+{
+    statementlistPrima();
+}
+
+void statementlistPrima() :{}
+{
+    statement() statementlistPrima(); | (statementlistPrima())*
+}
+
+void statement() :{}
+{
+    expressionstmt() | compoundstmt() | selectionstmt | iterationstmt | returnstmt
+}
+
+void expressionstmt() :{}
+{
+    expression() <PUNCOMA> | <PUNCOMA>
+}
+
+void selectionstmt() :{}
+{
+    <If> <PARIZ> expression() <PARDER> statement() | <If> <PARIZ> expression() <PARDER> statement() <Else> statement()
+}
+
+void iterationstmt() :{}
+{
+    <While> <PARIZ> expression() <PARDER> statement()
+}
+
+void returnstmt() :{}
+{
+    <Return> <PUNCOMA> | <Return> expression() <PUNCOMA>
+}
+
+void expression() :{}
+{
+    var() <OPASIG> expression() | simpleExpression();
+}
+
+void var() :{}
+{
+    <ID> | <ID> <CORIZ> expression() <CORDER>
+}
+
+void simpleExpression :{}
+{
+    additiveExpression() relop() additiveExpression() | additiveExpression()
+}
+
 void Inicio() :{}
 {
     (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|<NUMDEC>|
