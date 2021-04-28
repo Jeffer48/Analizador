@@ -294,6 +294,66 @@ void simpleExpression :{}
     additiveExpression() relop() additiveExpression() | additiveExpression()
 }
 
+void relop() :{}
+{
+    <OPMENORIGUAL> | <OPMENOR> | <OPMAYOR> | <OPMAYORIGUAL> | <OPIGUALIGUAL> | <OPDIF>
+}
+
+void additiveExpression() :{}
+{
+    term() additiveExpressionPrima()
+}
+
+void additiveExpressionPrima() : {}
+{
+    addop() term() additiveExpressionPrima() | (additiveExpressionPrima())*
+}
+
+void addop() :{}
+{
+    <OPSUMA> | <OPRESTA>
+}
+
+void term() :{}
+{
+    factor() termPrima()
+}
+
+void termPrima() :{}
+{
+    mulop() factor() termPrima() | (termPrima())*
+}
+
+void mulop() :{}
+{
+    <OPMULTIPLICA> | <OPDIV>
+}
+
+void factor() :{}
+{
+    <PARIZ> expression() <PARDER> | var() | <NUM>
+}
+
+void call() :{}
+{
+    <ID> <PARIZ> args() <PARDER>
+}
+
+void args() :{}
+{
+    arglist() | (args())*
+}
+
+void arglist() :{}
+{
+    expression() arglistPrima()
+}
+
+arglistPrima() :{}
+{
+    <OPCOMA> expression() arglistPrima() | (arglistPrima())* 
+}
+
 void Inicio() :{}
 {
     (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|<NUMDEC>|
