@@ -349,7 +349,7 @@ void arglist() :{}
     expression() arglistPrima()
 }
 
-arglistPrima() :{}
+void arglistPrima() :{}
 {
     <OPCOMA> expression() arglistPrima() | (arglistPrima())* 
 }
