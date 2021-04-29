@@ -256,7 +256,7 @@ void statementlistPrima() :{}
 
 void statement() :{}
 {
-    expressionstmt() | compoundstmt() | selectionstmt | iterationstmt | returnstmt
+    expressionstmt() | compoundstmt() | selectionstmt() | iterationstmt() | returnstmt()
 }
 
 void expressionstmt() :{}
@@ -289,7 +289,7 @@ void var() :{}
     <ID> | <ID> <CORIZ> expression() <CORDER>
 }
 
-void simpleExpression :{}
+void simpleExpression() :{}
 {
     additiveExpression() relop() additiveExpression() | additiveExpression()
 }
