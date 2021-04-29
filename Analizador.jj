@@ -186,7 +186,7 @@ void declarationlist() :{}
 
 void declarationlistPrima() :{}
 {
-    declaration() declarationlistPrima() | (declarationlistPrima())* 
+    (declaration() declarationlistPrima())* 
 }
 
 void declaration() :{}
@@ -221,7 +221,7 @@ void paramlist() :{}
 
 void paramlistPrima() :{}
 {
-    <OPCOMA> param() paramlistPrima() | (paramlistPrima())*
+    (<OPCOMA> param() paramlistPrima())*
 }
 
 void param() :{}
@@ -241,7 +241,7 @@ void localdeclarations() :{}
 
 void localdeclarationsPrima() :{}
 {
-    vardeclaration() localdeclarationsPrima() | (localdeclarationsPrima())*
+    (vardeclaration() localdeclarationsPrima())*
 }
 
 void statementlist() :{}
@@ -251,7 +251,7 @@ void statementlist() :{}
 
 void statementlistPrima() :{}
 {
-    statement() statementlistPrima() | (statementlistPrima())*
+    (statement() statementlistPrima())*
 }
 
 void statement() :{}
@@ -306,7 +306,7 @@ void additiveExpression() :{}
 
 void additiveExpressionPrima() : {}
 {
-    addop() term() additiveExpressionPrima() | (additiveExpressionPrima())*
+    (addop() term() additiveExpressionPrima())*
 }
 
 void addop() :{}
@@ -321,7 +321,7 @@ void term() :{}
 
 void termPrima() :{}
 {
-    mulop() factor() termPrima() | (termPrima())*
+    (mulop() factor() termPrima())*
 }
 
 void mulop() :{}
@@ -351,7 +351,7 @@ void arglist() :{}
 
 void arglistPrima() :{}
 {
-    <OPCOMA> expression() arglistPrima() | (arglistPrima())* 
+    (<OPCOMA> expression() arglistPrima())* 
 }
 
 void Inicio() :{}
