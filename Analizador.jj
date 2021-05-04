@@ -1,7 +1,8 @@
 PARSER_BEGIN(Analizador)
     public class Analizador {
         public static void main(String args[]) throws ParseException {
-            Analizador analizador = new Analizador(System.in);analizador.Inicio();
+            Analizador analizador = new Analizador(System.in);
+            analizador.Inicio();
     }   
 }
 PARSER_END(Analizador)
@@ -174,9 +175,14 @@ SPECIAL_TOKEN:
 <SIMBNOVALIDO: ~[]> {System.out.println("Encontre un simbolo no valido, en la linea:" + matchedToken.beginLine);} 
 }
 
+void Inicio() :{}
+{
+    (program())+<EOF>
+}
+
 void program() :{}
 {
-    (declarationlist()) + <EOF>
+    (declarationlist())
 }
 
 void declarationlist() :{}
@@ -186,17 +192,22 @@ void declarationlist() :{}
 
 void declarationlistPrima() :{}
 {
-    (declaration() declarationlistPrima())* 
+    declaration() declarationlistPrima() | {}
 }
 
 void declaration() :{}
 {
-    vardeclaration() fundeclaration()
+    LOOKAHEAD(2) vardeclaration() | LOOKAHEAD(2) fundeclaration()
 }
 
 void vardeclaration() :{}
 {
-    typespecifer() <ID> <PUNCOMA> | typespecifer() <ID> <CORIZ> <NUM> <CORDER> <PUNCOMA>
+    typespecifer() <ID> vardeclarationPre()
+}
+
+void vardeclarationPre() :{}
+{
+    <PUNCOMA> | <CORIZ> <NUM> <CORDER> <PUNCOMA>
 }
 
 void typespecifer() :{}
@@ -211,7 +222,7 @@ void fundeclaration() :{}
 
 void params() :{}
 {
-    paramlist() | <Void>
+    LOOKAHEAD(2) paramlist() | LOOKAHEAD(2) <Void>
 }
 
 void paramlist() :{}
@@ -221,12 +232,17 @@ void paramlist() :{}
 
 void paramlistPrima() :{}
 {
-    (<OPCOMA> param() paramlistPrima())*
+    <OPCOMA> param() paramlistPrima() | {}
 }
 
 void param() :{}
 {
-    typespecifer() <ID> | typespecifer() <ID> <CORIZ> <CORDER>
+    typespecifer() <ID> paramPre()
+}
+
+void paramPre() :{}
+{
+    {} | <CORIZ> <CORDER>
 }
 
 void compoundstmt() :{}
@@ -241,7 +257,7 @@ void localdeclarations() :{}
 
 void localdeclarationsPrima() :{}
 {
-    (vardeclaration() localdeclarationsPrima())*
+    vardeclaration() localdeclarationsPrima() | {}
 }
 
 void statementlist() :{}
@@ -251,7 +267,7 @@ void statementlist() :{}
 
 void statementlistPrima() :{}
 {
-    (statement() statementlistPrima())*
+    statement() statementlistPrima() | {}
 }
 
 void statement() :{}
@@ -266,7 +282,12 @@ void expressionstmt() :{}
 
 void selectionstmt() :{}
 {
-    <If> <PARIZ> expression() <PARDER> statement() | <If> <PARIZ> expression() <PARDER> statement() <Else> statement()
+    <If> <PARIZ> expression() <PARDER> statement() selectionstmtPre()
+}
+
+void selectionstmtPre() :{}
+{
+    {} | <Else> statement()
 }
 
 void iterationstmt() :{}
@@ -276,22 +297,37 @@ void iterationstmt() :{}
 
 void returnstmt() :{}
 {
-    <Return> <PUNCOMA> | <Return> expression() <PUNCOMA>
+    <Return> returnstmtPre()
+}
+
+void returnstmtPre() :{}
+{
+    <PUNCOMA> | expression() <PUNCOMA>
 }
 
 void expression() :{}
 {
-    var() <OPASIG> expression() | simpleExpression()
+    LOOKAHEAD(3) var() <OPASIG> expression() | LOOKAHEAD(3) simpleExpression()
 }
 
 void var() :{}
 {
-    <ID> | <ID> <CORIZ> expression() <CORDER>
+    <ID> varPre()
+}
+
+void varPre() :{}
+{
+    {} | <CORIZ> expression() <CORDER>
 }
 
 void simpleExpression() :{}
 {
-    additiveExpression() relop() additiveExpression() | additiveExpression()
+    additiveExpression() simpleExpressionPre()
+}
+
+void simpleExpressionPre() :{}
+{
+    relop() additiveExpression() | {}
 }
 
 void relop() :{}
@@ -306,7 +342,7 @@ void additiveExpression() :{}
 
 void additiveExpressionPrima() : {}
 {
-    (addop() term() additiveExpressionPrima())*
+    addop() term() additiveExpressionPrima() | {}
 }
 
 void addop() :{}
@@ -321,7 +357,7 @@ void term() :{}
 
 void termPrima() :{}
 {
-    (mulop() factor() termPrima())*
+    mulop() factor() termPrima() | {}
 }
 
 void mulop() :{}
@@ -341,7 +377,7 @@ void call() :{}
 
 void args() :{}
 {
-    arglist() | (args())*
+    arglist() | {}
 }
 
 void arglist() :{}
@@ -351,11 +387,5 @@ void arglist() :{}
 
 void arglistPrima() :{}
 {
-    (<OPCOMA> expression() arglistPrima())* 
-}
-
-void Inicio() :{}
-{
-    (<If>|<Else>|<While>|<Void>|<Main>|<Return>|<Int>|<Float>|<OPDIF>|<OPASIG>|<PUNCOMA>|<OPCOMA>|<PARIZ>|<PARDER>|<CORIZ>|<CORDER>|<LLAVIZ>|<LLAVDER>|<ID>|<NUM>|<NUMDEC>|
-    <OPSUMA>|<OPRESTA>|<OPMULTIPLICA>|<OPDIV>|<OPMENOR>|<OPMENORIGUAL>|<OPMAYOR>|<OPMAYORIGUAL>|<OPIGUALIGUAL>|<IDNOVALIDO>|<NUMNOVALIDO>)+<EOF>
+    <OPCOMA> expression() arglistPrima() | {} 
 }

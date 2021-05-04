@@ -41,39 +41,39 @@ public interface AnalizadorConstants {
   /** RegularExpression Id. */
   int CORDER = 26;
   /** RegularExpression Id. */
-  int SIMBNOVALIDO = 27;
+  int IDNOVALIDO = 27;
   /** RegularExpression Id. */
-  int IDNOVALIDO = 28;
+  int NUMNOVALIDO = 28;
   /** RegularExpression Id. */
-  int NUMNOVALIDO = 29;
+  int LLAVIZ = 29;
   /** RegularExpression Id. */
-  int LLAVIZ = 30;
+  int LLAVDER = 30;
   /** RegularExpression Id. */
-  int LLAVDER = 31;
+  int ID = 31;
   /** RegularExpression Id. */
-  int ID = 32;
+  int NUM = 32;
   /** RegularExpression Id. */
-  int NUM = 33;
+  int NUMDEC = 33;
   /** RegularExpression Id. */
-  int NUMDEC = 34;
+  int OPSUMA = 34;
   /** RegularExpression Id. */
-  int OPSUMA = 35;
+  int OPRESTA = 35;
   /** RegularExpression Id. */
-  int OPRESTA = 36;
+  int OPMULTIPLICA = 36;
   /** RegularExpression Id. */
-  int OPMULTIPLICA = 37;
+  int OPDIV = 37;
   /** RegularExpression Id. */
-  int OPDIV = 38;
+  int OPMENOR = 38;
   /** RegularExpression Id. */
-  int OPMENOR = 39;
+  int OPMENORIGUAL = 39;
   /** RegularExpression Id. */
-  int OPMENORIGUAL = 40;
+  int OPMAYOR = 40;
   /** RegularExpression Id. */
-  int OPMAYOR = 41;
+  int OPMAYORIGUAL = 41;
   /** RegularExpression Id. */
-  int OPMAYORIGUAL = 42;
+  int OPIGUALIGUAL = 42;
   /** RegularExpression Id. */
-  int OPIGUALIGUAL = 43;
+  int SIMBNOVALIDO = 43;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -111,7 +111,6 @@ public interface AnalizadorConstants {
     "\")\"",
     "\"[\"",
     "\"]\"",
-    "<SIMBNOVALIDO>",
     "<IDNOVALIDO>",
     "<NUMNOVALIDO>",
     "\"{\"",
@@ -128,7 +127,7 @@ public interface AnalizadorConstants {
     "\">\"",
     "\">=\"",
     "\"==\"",
-    "<token of kind 44>",
+    "<SIMBNOVALIDO>",
   };
 
 }
