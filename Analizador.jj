@@ -1,40 +1,10 @@
-import java.util.Hashtable;
-
 PARSER_BEGIN(Analizador)
-    Hashtable tablaH = new Hashtable;
-    Enumeration recorrer;
-
-    String ID;
-    String tipo;
-    String valor;
-
+    
     public class Analizador {
         public static void main(String args[]) throws ParseException {
             Analizador analizador = new Analizador(System.in);
             analizador.Inicio();
 
-            Analizador a = new Analizador();
-            a.tabla();
-    }
-
-    public void tabla(){
-        System.out.println("Terminado");
-		recorrer = tablaH.keys();
-			while(recorrer.hasMoreElements())
-                {
-                        valor = (String) recorrer.nextElement();
-                        System.out.println(valor + ": " + tablaH.get(valor));
-                }
-        }
-
-        public static void add(String x){
-			tabla.put(x,idef);
-			
-		}
-		public static void addidef(String z){
-			idef=z;
-			
-		}
     }
 }
 PARSER_END(Analizador)
