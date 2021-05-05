@@ -244,7 +244,7 @@ void param() :{}
 
 void paramPre() :{}
 {
-    (LOOKAHEAD(2) <CORIZ> <CORDER>)*
+    (<CORIZ> <CORDER>)*
 }
 
 void compoundstmt() :{}
@@ -259,7 +259,7 @@ void localdeclarations() :{}
 
 void localdeclarationsPrima() :{}
 {
-    (LOOKAHEAD(2) vardeclaration() localdeclarationsPrima())*   /* Posible error */
+    (LOOKAHEAD(2) vardeclaration() localdeclarationsPrima())*  
 }
 
 void statementlist() :{}
@@ -274,7 +274,7 @@ void statementlistPrima() :{}
 
 void statement() :{}
 {
-    LOOKAHEAD(2) expressionstmt() | compoundstmt() | selectionstmt() | iterationstmt() | returnstmt()
+    expressionstmt() | compoundstmt() | selectionstmt() | iterationstmt() | returnstmt()
 }
 
 void expressionstmt() :{}
@@ -304,12 +304,12 @@ void returnstmt() :{}
 
 void returnstmtPre() :{}
 {
-    LOOKAHEAD(2) <PUNCOMA> | expression() <PUNCOMA>
+   <PUNCOMA> | expression() <PUNCOMA>
 }
 
 void expression() :{}
 {
-    LOOKAHEAD(3) var() <OPASIG> expression() | simpleExpression()
+    LOOKAHEAD(8) var() <OPASIG> expression() | simpleExpression()
 }
 
 void var() :{}
@@ -369,7 +369,7 @@ void mulop() :{}
 
 void factor() :{}
 {
-    <PARIZ> expression() <PARDER> | LOOKAHEAD(2) var() | call() | <NUM>
+    <PARIZ> expression() <PARDER> | LOOKAHEAD(2) var() | LOOKAHEAD(2) call() | <NUM>
 }
 
 void call() :{}
@@ -379,7 +379,7 @@ void call() :{}
 
 void args() :{}
 {
-    (LOOKAHEAD(2) arglist())*
+    (arglist())*
 }
 
 void arglist() :{}
