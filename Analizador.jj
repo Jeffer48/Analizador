@@ -1,4 +1,5 @@
 PARSER_BEGIN(Analizador)
+
     public class Analizador {
         public static void main(String args[]) throws ParseException {
             Analizador analizador = new Analizador(System.in);
@@ -192,12 +193,12 @@ void declarationlist() :{}
 
 void declarationlistPrima() :{}
 {
-    declaration() declarationlistPrima() | {}
+    (LOOKAHEAD(2) declaration() declarationlistPrima())*
 }
 
 void declaration() :{}
 {
-    LOOKAHEAD(2) vardeclaration() | LOOKAHEAD(2) fundeclaration()
+    LOOKAHEAD(3) vardeclaration() | fundeclaration()
 }
 
 void vardeclaration() :{}
@@ -222,7 +223,7 @@ void fundeclaration() :{}
 
 void params() :{}
 {
-    LOOKAHEAD(2) paramlist() | LOOKAHEAD(2) <Void>
+    LOOKAHEAD(2) paramlist() | <Void>
 }
 
 void paramlist() :{}
@@ -232,7 +233,7 @@ void paramlist() :{}
 
 void paramlistPrima() :{}
 {
-    <OPCOMA> param() paramlistPrima() | {}
+    (LOOKAHEAD(2) <OPCOMA> param() paramlistPrima())*
 }
 
 void param() :{}
@@ -242,7 +243,7 @@ void param() :{}
 
 void paramPre() :{}
 {
-    {} | <CORIZ> <CORDER>
+    (LOOKAHEAD(2) <CORIZ> <CORDER>)*
 }
 
 void compoundstmt() :{}
@@ -257,7 +258,7 @@ void localdeclarations() :{}
 
 void localdeclarationsPrima() :{}
 {
-    vardeclaration() localdeclarationsPrima() | {}
+    (LOOKAHEAD(2) vardeclaration() localdeclarationsPrima())*
 }
 
 void statementlist() :{}
@@ -267,7 +268,7 @@ void statementlist() :{}
 
 void statementlistPrima() :{}
 {
-    statement() statementlistPrima() | {}
+    (LOOKAHEAD(2) statement() statementlistPrima())*
 }
 
 void statement() :{}
@@ -287,7 +288,7 @@ void selectionstmt() :{}
 
 void selectionstmtPre() :{}
 {
-    {} | <Else> statement()
+    (LOOKAHEAD(2) <Else> statement())*
 }
 
 void iterationstmt() :{}
@@ -302,12 +303,12 @@ void returnstmt() :{}
 
 void returnstmtPre() :{}
 {
-    <PUNCOMA> | expression() <PUNCOMA>
+    LOOKAHEAD(2) <PUNCOMA> | expression() <PUNCOMA>
 }
 
 void expression() :{}
 {
-    LOOKAHEAD(3) var() <OPASIG> expression() | LOOKAHEAD(3) simpleExpression()
+    LOOKAHEAD(3) var() <OPASIG> expression() | simpleExpression()
 }
 
 void var() :{}
@@ -317,7 +318,7 @@ void var() :{}
 
 void varPre() :{}
 {
-    {} | <CORIZ> expression() <CORDER>
+    (LOOKAHEAD(2) <CORIZ> expression() <CORDER>)*
 }
 
 void simpleExpression() :{}
@@ -327,7 +328,7 @@ void simpleExpression() :{}
 
 void simpleExpressionPre() :{}
 {
-    relop() additiveExpression() | {}
+    (LOOKAHEAD(2) relop() additiveExpression())*
 }
 
 void relop() :{}
@@ -342,7 +343,7 @@ void additiveExpression() :{}
 
 void additiveExpressionPrima() : {}
 {
-    addop() term() additiveExpressionPrima() | {}
+    (LOOKAHEAD(2) addop() term() additiveExpressionPrima())*
 }
 
 void addop() :{}
@@ -357,7 +358,7 @@ void term() :{}
 
 void termPrima() :{}
 {
-    mulop() factor() termPrima() | {}
+    (LOOKAHEAD(2) mulop() factor() termPrima())*
 }
 
 void mulop() :{}
@@ -367,7 +368,7 @@ void mulop() :{}
 
 void factor() :{}
 {
-    <PARIZ> expression() <PARDER> | var() | <NUM>
+    <PARIZ> expression() <PARDER> | LOOKAHEAD(2) var() | call() | <NUM>
 }
 
 void call() :{}
@@ -377,7 +378,7 @@ void call() :{}
 
 void args() :{}
 {
-    arglist() | {}
+    (LOOKAHEAD(2) arglist())*
 }
 
 void arglist() :{}
@@ -387,5 +388,5 @@ void arglist() :{}
 
 void arglistPrima() :{}
 {
-    <OPCOMA> expression() arglistPrima() | {} 
+    (LOOKAHEAD(2) <OPCOMA> expression() arglistPrima())*
 }
