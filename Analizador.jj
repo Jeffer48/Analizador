@@ -53,10 +53,6 @@ TOKEN :{
 }
 
 TOKEN :{
-    < Main: ["m"]["a"]["i"]["n"] > {System.out.println("Encontre un main en la linea: " + matchedToken.beginLine);}
-}
-
-TOKEN :{
     < Return: ["r"]["e"]["t"]["u"]["r"]["n"] > {System.out.println("Encontre un return en la linea: " + matchedToken.beginLine);}
 }
 
@@ -244,7 +240,7 @@ void param() :{}
 
 void paramPre() :{}
 {
-    (LOOKAHEAD(2) <CORIZ> <CORDER>)*
+    (<CORIZ> <CORDER>)*
 }
 
 void compoundstmt() :{}
@@ -304,12 +300,12 @@ void returnstmt() :{}
 
 void returnstmtPre() :{}
 {
-    LOOKAHEAD(2) <PUNCOMA> | expression() <PUNCOMA>
+    LOOKAHEAD(2) <PUNCOMA> | LOOKAHEAD(8) expression() <PUNCOMA>
 }
 
 void expression() :{}
 {
-    LOOKAHEAD(3) var() <OPASIG> expression() | simpleExpression()
+    LOOKAHEAD(8) var() <OPASIG> expression() | simpleExpression()
 }
 
 void var() :{}
@@ -369,7 +365,7 @@ void mulop() :{}
 
 void factor() :{}
 {
-    <PARIZ> expression() <PARDER> | LOOKAHEAD(2) var() | call() | <NUM>
+    <PARIZ> expression() <PARDER> | <NUM> | LOOKAHEAD(2) call() | var()
 }
 
 void call() :{}
