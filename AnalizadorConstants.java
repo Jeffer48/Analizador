@@ -17,63 +17,61 @@ public interface AnalizadorConstants {
   /** RegularExpression Id. */
   int Void = 14;
   /** RegularExpression Id. */
-  int Main = 15;
+  int Return = 15;
   /** RegularExpression Id. */
-  int Return = 16;
+  int Int = 16;
   /** RegularExpression Id. */
-  int Int = 17;
+  int Float = 17;
   /** RegularExpression Id. */
-  int Float = 18;
+  int OPDIF = 18;
   /** RegularExpression Id. */
-  int OPDIF = 19;
+  int OPASIG = 19;
   /** RegularExpression Id. */
-  int OPASIG = 20;
+  int PUNCOMA = 20;
   /** RegularExpression Id. */
-  int PUNCOMA = 21;
+  int OPCOMA = 21;
   /** RegularExpression Id. */
-  int OPCOMA = 22;
+  int PARIZ = 22;
   /** RegularExpression Id. */
-  int PARIZ = 23;
+  int PARDER = 23;
   /** RegularExpression Id. */
-  int PARDER = 24;
+  int CORIZ = 24;
   /** RegularExpression Id. */
-  int CORIZ = 25;
+  int CORDER = 25;
   /** RegularExpression Id. */
-  int CORDER = 26;
+  int IDNOVALIDO = 26;
   /** RegularExpression Id. */
-  int IDNOVALIDO = 27;
+  int NUMNOVALIDO = 27;
   /** RegularExpression Id. */
-  int NUMNOVALIDO = 28;
+  int LLAVIZ = 28;
   /** RegularExpression Id. */
-  int LLAVIZ = 29;
+  int LLAVDER = 29;
   /** RegularExpression Id. */
-  int LLAVDER = 30;
+  int ID = 30;
   /** RegularExpression Id. */
-  int ID = 31;
+  int NUM = 31;
   /** RegularExpression Id. */
-  int NUM = 32;
+  int NUMDEC = 32;
   /** RegularExpression Id. */
-  int NUMDEC = 33;
+  int OPSUMA = 33;
   /** RegularExpression Id. */
-  int OPSUMA = 34;
+  int OPRESTA = 34;
   /** RegularExpression Id. */
-  int OPRESTA = 35;
+  int OPMULTIPLICA = 35;
   /** RegularExpression Id. */
-  int OPMULTIPLICA = 36;
+  int OPDIV = 36;
   /** RegularExpression Id. */
-  int OPDIV = 37;
+  int OPMENOR = 37;
   /** RegularExpression Id. */
-  int OPMENOR = 38;
+  int OPMENORIGUAL = 38;
   /** RegularExpression Id. */
-  int OPMENORIGUAL = 39;
+  int OPMAYOR = 39;
   /** RegularExpression Id. */
-  int OPMAYOR = 40;
+  int OPMAYORIGUAL = 40;
   /** RegularExpression Id. */
-  int OPMAYORIGUAL = 41;
+  int OPIGUALIGUAL = 41;
   /** RegularExpression Id. */
-  int OPIGUALIGUAL = 42;
-  /** RegularExpression Id. */
-  int SIMBNOVALIDO = 43;
+  int SIMBNOVALIDO = 42;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -99,7 +97,6 @@ public interface AnalizadorConstants {
     "<Else>",
     "<While>",
     "<Void>",
-    "<Main>",
     "<Return>",
     "<Int>",
     "<Float>",
