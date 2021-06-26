@@ -1,23 +1,25 @@
-options { Ignore_Case = false; }
+options{
+    //IGNORE_CASE=true ;
+    //DEBUG_PARSER=true;
+    //DEBUG_LOOKAHEAD=true;
+    //DEBUG_TOKEN_MANAGER=true;
+    //LOOKAHEAD = 10;
+}
 
 PARSER_BEGIN(Analizador)
 import java.util.Hashtable;
     
     public class Analizador {
-        static Hashtable<String, String> tH = new Hashtable<String, String>();
-
-        static String id = "";
+        static Hashtable HT = new Hashtable();
+        static Hashtable HA = new Hashtable();
+        static int valor = 0;
+        static boolean r = false;
 
         public static void main(String args[]) throws ParseException {
             Analizador analizador = new Analizador(System.in);
             analizador.Inicio();
         }
-
-        public static void putInHasTable(String tipoV, String id){
-            tH.put(tipoV, id);
-            System.out.println("Valores: \n"+ tH);
-        }
-}
+    }
 PARSER_END(Analizador)
 SKIP : {  " "| "\t"| "\n"| "\r"}
 
@@ -72,7 +74,7 @@ TOKEN :{
 }
 
 TOKEN :{
-    < Float: ["f"]["l"]["o"]["a"]["t"] > {System.out.println("Encontre un main en la linea: " + matchedToken.beginLine);}
+    < Double: ["d"]["o"]["u"]["b"]["l"]["e"] > {System.out.println("Encontre un main en la linea: " + matchedToken.beginLine);}
 }
 
 TOKEN:
@@ -209,24 +211,24 @@ void declaration() :{}
     LOOKAHEAD(3) vardeclaration() | fundeclaration()
 }
 
-void vardeclaration() :{}
+void vardeclaration() :{String type = ""; String id = "";}
 {
-    typespecifer() <ID> vardeclarationPre()
+    type=typespecifer() <ID> {id=token.image; if(HT.containsKey(id)) System.out.println("La variable ya existe"); HT.put(type, id);} vardeclarationPre(id)
 }
 
-void vardeclarationPre() :{}
+void vardeclarationPre(String id) :{int size = 0;}
 {
-    <PUNCOMA> | <CORIZ> <NUM> <CORDER> <PUNCOMA>
+    <PUNCOMA> | <CORIZ> <NUM> {size=Integer.parseInt(token.image);} <CORDER> <PUNCOMA> {HA.put(id, size);}
 }
 
-void typespecifer() :{}
+String typespecifer() :{}
 {
-    <Int> | <Void>
+    <Int> {return "int";} | <Void> {return "void";} | <Double> {return "double";}
 }
 
-void fundeclaration() :{}
+void fundeclaration() :{String type = "";}
 {
-    typespecifer() <ID> <PARIZ> params() <PARDER> compoundstmt()
+    type=typespecifer() <ID> <PARIZ> params() <PARDER> compoundstmt() {if(!r && type.equals("int")) System.out.println("Falta el return"); r=false;}
 }
 
 void params() :{}
@@ -311,7 +313,7 @@ void returnstmt() :{}
 
 void returnstmtPre() :{}
 {
-    LOOKAHEAD(2) <PUNCOMA> | LOOKAHEAD(8) expression() <PUNCOMA>
+    LOOKAHEAD(2) <PUNCOMA> | LOOKAHEAD(8) expression() <PUNCOMA> {r=true;}
 }
 
 void expression() :{}
@@ -319,12 +321,17 @@ void expression() :{}
     LOOKAHEAD(8) var() <OPASIG> expression() | simpleExpression()
 }
 
-void var() :{}
+void var() :{String id = "";}
 {
-    <ID> varPre()
+    <ID> {id=token.image;} varPre(id)
 }
 
-void varPre() :{}
+void varPre(String id) :{}
+{
+    (LOOKAHEAD(2) <CORIZ> expression() {int v=Integer.parseInt(""+HA.get(id))-1; if(v < valor) System.out.println("NullPointerException");} <CORDER>)*
+}
+
+void varPre2() :{}
 {
     (LOOKAHEAD(2) <CORIZ> expression() <CORDER>)*
 }
@@ -376,7 +383,7 @@ void mulop() :{}
 
 void factor() :{}
 {
-    <PARIZ> expression() <PARDER> | <NUM> | LOOKAHEAD(2) call() | var()
+    <PARIZ> expression() <PARDER> | <NUM> {valor = Integer.parseInt(token.image);} | LOOKAHEAD(2) call() | var()
 }
 
 void call() :{}

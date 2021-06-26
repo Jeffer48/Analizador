@@ -4,16 +4,13 @@
 * the greates common denominator (GCD) of a pair of integers.
 */
 
-int gcd(int u, int v)
+int gcd(void)
 {
-	if(v==0) return u;
-	else return gcd;
-	/* u-u/v*v == u mod v */
-}
+	int a;
+	int b[3];
+	int c[4];
 
-void main(void)
-{
-	int x; int y;
-	x=input();y=input();
-	output(gcd(x,y));
+	b[2] = 3;
+	c[4] = 2;
+	return a;
 }

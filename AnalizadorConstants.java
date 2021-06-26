@@ -21,7 +21,7 @@ public interface AnalizadorConstants {
   /** RegularExpression Id. */
   int Int = 16;
   /** RegularExpression Id. */
-  int Float = 17;
+  int Double = 17;
   /** RegularExpression Id. */
   int OPDIF = 18;
   /** RegularExpression Id. */
@@ -99,7 +99,7 @@ public interface AnalizadorConstants {
     "<Void>",
     "<Return>",
     "<Int>",
-    "<Float>",
+    "<Double>",
     "\"!=\"",
     "\"=\"",
     "\";\"",
