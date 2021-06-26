@@ -1,11 +1,22 @@
+options { Ignore_Case = false; }
+
 PARSER_BEGIN(Analizador)
+import java.util.Hashtable;
     
     public class Analizador {
+        static Hashtable<String, String> tH = new Hashtable<String, String>();
+
+        static String id = "";
+
         public static void main(String args[]) throws ParseException {
             Analizador analizador = new Analizador(System.in);
             analizador.Inicio();
+        }
 
-    }
+        public static void putInHasTable(String tipoV, String id){
+            tH.put(tipoV, id);
+            System.out.println("Valores: \n"+ tH);
+        }
 }
 PARSER_END(Analizador)
 SKIP : {  " "| "\t"| "\n"| "\r"}
