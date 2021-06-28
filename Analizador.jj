@@ -10,10 +10,12 @@ PARSER_BEGIN(Analizador)
 import java.util.Hashtable;
     
     public class Analizador {
-        static Hashtable HT = new Hashtable();
-        static Hashtable HA = new Hashtable();
-        static int valor = 0;
+        static Hashtable HT = new Hashtable(); //Id y tipo
+        static Hashtable HA = new Hashtable(); //Id y valor
         static boolean r = false;
+        //static int valor = 0;
+        static String valor = "";
+        static String idA = "";
 
         public static void main(String args[]) throws ParseException {
             Analizador analizador = new Analizador(System.in);
@@ -74,7 +76,7 @@ TOKEN :{
 }
 
 TOKEN :{
-    < Double: ["d"]["o"]["u"]["b"]["l"]["e"] > {System.out.println("Encontre un main en la linea: " + matchedToken.beginLine);}
+    < Real: ["r"]["e"]["a"]["l"] > {System.out.println("Encontre un main en la linea: " + matchedToken.beginLine);}
 }
 
 TOKEN:
@@ -213,7 +215,7 @@ void declaration() :{}
 
 void vardeclaration() :{String type = ""; String id = "";}
 {
-    type=typespecifer() <ID> {id=token.image; if(HT.containsKey(id)) System.out.println("La variable ya existe"); HT.put(type, id);} vardeclarationPre(id)
+    type=typespecifer() <ID> {id=token.image; if(HT.containsKey(id)) System.out.println("La variable ya existe"); HT.put(id, type);} vardeclarationPre(id)
 }
 
 void vardeclarationPre(String id) :{int size = 0;}
@@ -223,7 +225,7 @@ void vardeclarationPre(String id) :{int size = 0;}
 
 String typespecifer() :{}
 {
-    <Int> {return "int";} | <Void> {return "void";} | <Double> {return "double";}
+    <Int> {return "int";} | <Void> {return "void";} | <Real> {return "real";}
 }
 
 void fundeclaration() :{String type = "";}
@@ -318,22 +320,24 @@ void returnstmtPre() :{}
 
 void expression() :{}
 {
-    LOOKAHEAD(8) var() <OPASIG> expression() | simpleExpression()
+    LOOKAHEAD(8) var() <OPASIG> expression() 
+    {
+        String t = ""+HT.get(idA);
+        if(t.equals("real")&&valor.contains(".")){double t2=Double.parseDouble(valor); HA.replace(idA,t2);}
+        else if(t.equals("int")&&!valor.contains(".")){int t2=Integer.parseInt(valor); HA.replace(idA,t2);}
+        else{System.out.println("Tipos de variables incompatibles");}
+    } | 
+    simpleExpression()
 }
 
 void var() :{String id = "";}
 {
-    <ID> {id=token.image;} varPre(id)
+    <ID> {id=token.image; idA=id;} varPre(id)
 }
 
 void varPre(String id) :{}
 {
-    (LOOKAHEAD(2) <CORIZ> expression() {int v=Integer.parseInt(""+HA.get(id))-1; if(v < valor) System.out.println("NullPointerException");} <CORDER>)*
-}
-
-void varPre2() :{}
-{
-    (LOOKAHEAD(2) <CORIZ> expression() <CORDER>)*
+    (LOOKAHEAD(2) <CORIZ> expression() {int v=Integer.parseInt(""+HA.get(id))-1; if(v < Integer.parseInt(valor)) System.out.println("NullPointerException");} <CORDER>)*
 }
 
 void simpleExpression() :{}
@@ -383,7 +387,7 @@ void mulop() :{}
 
 void factor() :{}
 {
-    <PARIZ> expression() <PARDER> | <NUM> {valor = Integer.parseInt(token.image);} | LOOKAHEAD(2) call() | var()
+    <PARIZ> expression() <PARDER> | <NUM> {valor = token.image;} | <NUMDEC> {valor = token.image;} | LOOKAHEAD(2) call() | var()
 }
 
 void call() :{}

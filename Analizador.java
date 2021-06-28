@@ -2,10 +2,12 @@
 import java.util.Hashtable;
 
     public class Analizador implements AnalizadorConstants {
-        static Hashtable HT = new Hashtable();
-        static Hashtable HA = new Hashtable();
-        static int valor = 0;
+        static Hashtable HT = new Hashtable(); //Id y tipo
+        static Hashtable HA = new Hashtable(); //Id y valor
         static boolean r = false;
+        //static int valor = 0;
+        static String valor = "";
+        static String idA = "";
 
         public static void main(String args[]) throws ParseException {
             Analizador analizador = new Analizador(System.in);
@@ -19,7 +21,7 @@ import java.util.Hashtable;
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case Void:
       case Int:
-      case Double:
+      case Real:
         ;
         break;
       default:
@@ -59,7 +61,7 @@ import java.util.Hashtable;
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case Void:
       case Int:
-      case Double:
+      case Real:
         fundeclaration();
         break;
       default:
@@ -74,7 +76,7 @@ import java.util.Hashtable;
                         String type = ""; String id = "";
     type = typespecifer();
     jj_consume_token(ID);
-                              id=token.image; if(HT.containsKey(id)) System.out.println("La variable ya existe"); HT.put(type, id);
+                              id=token.image; if(HT.containsKey(id)) System.out.println("La variable ya existe"); HT.put(id, type);
     vardeclarationPre(id);
   }
 
@@ -109,9 +111,9 @@ import java.util.Hashtable;
       jj_consume_token(Void);
                                     {if (true) return "void";}
       break;
-    case Double:
-      jj_consume_token(Double);
-                                                                {if (true) return "double";}
+    case Real:
+      jj_consume_token(Real);
+                                                              {if (true) return "real";}
       break;
     default:
       jj_la1[3] = jj_gen;
@@ -260,6 +262,7 @@ import java.util.Hashtable;
     case PARIZ:
     case ID:
     case NUM:
+    case NUMDEC:
       expression();
       jj_consume_token(PUNCOMA);
       break;
@@ -326,11 +329,16 @@ import java.util.Hashtable;
       var();
       jj_consume_token(OPASIG);
       expression();
+        String t = ""+HT.get(idA);
+        if(t.equals("real")&&valor.contains(".")){double t2=Double.parseDouble(valor); HA.replace(idA,t2);}
+        else if(t.equals("int")&&!valor.contains(".")){int t2=Integer.parseInt(valor); HA.replace(idA,t2);}
+        else{System.out.println("Tipos de variables incompatibles");}
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PARIZ:
       case ID:
       case NUM:
+      case NUMDEC:
         simpleExpression();
         break;
       default:
@@ -344,7 +352,7 @@ import java.util.Hashtable;
   static final public void var() throws ParseException {
              String id = "";
     jj_consume_token(ID);
-          id=token.image;
+          id=token.image; idA=id;
     varPre(id);
   }
 
@@ -358,21 +366,7 @@ import java.util.Hashtable;
       }
       jj_consume_token(CORIZ);
       expression();
-                                        int v=Integer.parseInt(""+HA.get(id))-1; if(v < valor) System.out.println("NullPointerException");
-      jj_consume_token(CORDER);
-    }
-  }
-
-  static final public void varPre2() throws ParseException {
-    label_9:
-    while (true) {
-      if (jj_2_13(2)) {
-        ;
-      } else {
-        break label_9;
-      }
-      jj_consume_token(CORIZ);
-      expression();
+                                        int v=Integer.parseInt(""+HA.get(id))-1; if(v < Integer.parseInt(valor)) System.out.println("NullPointerException");
       jj_consume_token(CORDER);
     }
   }
@@ -383,12 +377,12 @@ import java.util.Hashtable;
   }
 
   static final public void simpleExpressionPre() throws ParseException {
-    label_10:
+    label_9:
     while (true) {
-      if (jj_2_14(2)) {
+      if (jj_2_13(2)) {
         ;
       } else {
-        break label_10;
+        break label_9;
       }
       relop();
       additiveExpression();
@@ -428,12 +422,12 @@ import java.util.Hashtable;
   }
 
   static final public void additiveExpressionPrima() throws ParseException {
-    label_11:
+    label_10:
     while (true) {
-      if (jj_2_15(2)) {
+      if (jj_2_14(2)) {
         ;
       } else {
-        break label_11;
+        break label_10;
       }
       addop();
       term();
@@ -462,12 +456,12 @@ import java.util.Hashtable;
   }
 
   static final public void termPrima() throws ParseException {
-    label_12:
+    label_11:
     while (true) {
-      if (jj_2_16(2)) {
+      if (jj_2_15(2)) {
         ;
       } else {
-        break label_12;
+        break label_11;
       }
       mulop();
       factor();
@@ -499,11 +493,15 @@ import java.util.Hashtable;
       break;
     case NUM:
       jj_consume_token(NUM);
-                                           valor = Integer.parseInt(token.image);
+                                           valor = token.image;
+      break;
+    case NUMDEC:
+      jj_consume_token(NUMDEC);
+                                                                             valor = token.image;
       break;
     default:
       jj_la1[12] = jj_gen;
-      if (jj_2_17(2)) {
+      if (jj_2_16(2)) {
         call();
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -527,12 +525,12 @@ import java.util.Hashtable;
   }
 
   static final public void args() throws ParseException {
-    label_13:
+    label_12:
     while (true) {
-      if (jj_2_18(2)) {
+      if (jj_2_17(2)) {
         ;
       } else {
-        break label_13;
+        break label_12;
       }
       arglist();
     }
@@ -544,12 +542,12 @@ import java.util.Hashtable;
   }
 
   static final public void arglistPrima() throws ParseException {
-    label_14:
+    label_13:
     while (true) {
-      if (jj_2_19(2)) {
+      if (jj_2_18(2)) {
         ;
       } else {
-        break label_14;
+        break label_13;
       }
       jj_consume_token(OPCOMA);
       expression();
@@ -683,34 +681,18 @@ import java.util.Hashtable;
     finally { jj_save(17, xla); }
   }
 
-  static private boolean jj_2_19(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_19(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(18, xla); }
-  }
-
-  static private boolean jj_3R_62() {
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3_16()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_27() {
-    if (jj_3R_29()) return true;
+  static private boolean jj_3R_26() {
+    if (jj_3R_28()) return true;
     if (jj_3R_62()) return true;
     return false;
   }
 
-  static private boolean jj_3R_38() {
+  static private boolean jj_3R_37() {
     if (jj_3R_54()) return true;
     return false;
   }
 
-  static private boolean jj_3R_26() {
+  static private boolean jj_3R_25() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(33)) {
@@ -720,14 +702,9 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3R_40() {
-    if (jj_3R_55()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_15() {
+  static private boolean jj_3_14() {
+    if (jj_3R_25()) return true;
     if (jj_3R_26()) return true;
-    if (jj_3R_27()) return true;
     if (jj_3R_61()) return true;
     return false;
   }
@@ -736,23 +713,18 @@ import java.util.Hashtable;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3_15()) { jj_scanpos = xsp; break; }
+      if (jj_3_14()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3R_25() {
-    if (jj_3R_27()) return true;
+  static private boolean jj_3R_24() {
+    if (jj_3R_26()) return true;
     if (jj_3R_61()) return true;
     return false;
   }
 
-  static private boolean jj_3R_37() {
-    if (jj_3R_53()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_24() {
+  static private boolean jj_3R_23() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(38)) {
@@ -774,9 +746,14 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3_14() {
+  static private boolean jj_3R_36() {
+    if (jj_3R_53()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_13() {
+    if (jj_3R_23()) return true;
     if (jj_3R_24()) return true;
-    if (jj_3R_25()) return true;
     return false;
   }
 
@@ -784,42 +761,31 @@ import java.util.Hashtable;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3_14()) { jj_scanpos = xsp; break; }
+      if (jj_3_13()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3_10() {
-    if (jj_3R_22()) return true;
-    if (jj_scan_token(PUNCOMA)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_55() {
-    if (jj_3R_25()) return true;
+    if (jj_3R_24()) return true;
     if (jj_3R_59()) return true;
     return false;
   }
 
-  static private boolean jj_3_13() {
-    if (jj_scan_token(CORIZ)) return true;
-    if (jj_3R_22()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_36() {
-    if (jj_3R_52()) return true;
+  static private boolean jj_3_10() {
+    if (jj_3R_21()) return true;
+    if (jj_scan_token(PUNCOMA)) return true;
     return false;
   }
 
   static private boolean jj_3_12() {
     if (jj_scan_token(CORIZ)) return true;
-    if (jj_3R_22()) return true;
+    if (jj_3R_21()) return true;
     if (jj_scan_token(CORDER)) return true;
     return false;
   }
 
-  static private boolean jj_3R_41() {
+  static private boolean jj_3R_40() {
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
@@ -828,30 +794,40 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3R_23() {
-    if (jj_scan_token(ID)) return true;
-    if (jj_3R_41()) return true;
+  static private boolean jj_3R_35() {
+    if (jj_3R_52()) return true;
     return false;
   }
 
   static private boolean jj_3R_22() {
+    if (jj_scan_token(ID)) return true;
+    if (jj_3R_40()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_39() {
+    if (jj_3R_55()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_21() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_11()) {
     jj_scanpos = xsp;
-    if (jj_3R_40()) return true;
+    if (jj_3R_39()) return true;
     }
     return false;
   }
 
   static private boolean jj_3_11() {
-    if (jj_3R_23()) return true;
-    if (jj_scan_token(OPASIG)) return true;
     if (jj_3R_22()) return true;
+    if (jj_scan_token(OPASIG)) return true;
+    if (jj_3R_21()) return true;
     return false;
   }
 
-  static private boolean jj_3R_35() {
+  static private boolean jj_3R_34() {
     if (jj_3R_51()) return true;
     return false;
   }
@@ -871,6 +847,11 @@ import java.util.Hashtable;
     return false;
   }
 
+  static private boolean jj_3R_44() {
+    if (jj_3R_22()) return true;
+    return false;
+  }
+
   static private boolean jj_3R_54() {
     if (jj_scan_token(Return)) return true;
     if (jj_3R_58()) return true;
@@ -885,12 +866,7 @@ import java.util.Hashtable;
 
   static private boolean jj_3_8() {
     if (jj_scan_token(Else)) return true;
-    if (jj_3R_19()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_44() {
-    if (jj_3R_23()) return true;
+    if (jj_3R_18()) return true;
     return false;
   }
 
@@ -900,34 +876,39 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3R_21() {
+  static private boolean jj_3_16() {
+    if (jj_3R_29()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_20() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_39()) {
+    if (jj_3R_38()) {
     jj_scanpos = xsp;
     if (jj_scan_token(20)) return true;
     }
     return false;
   }
 
-  static private boolean jj_3R_39() {
-    if (jj_3R_22()) return true;
+  static private boolean jj_3R_38() {
+    if (jj_3R_21()) return true;
     if (jj_scan_token(PUNCOMA)) return true;
     return false;
   }
 
-  static private boolean jj_3R_19() {
+  static private boolean jj_3R_18() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_7()) {
+    jj_scanpos = xsp;
+    if (jj_3R_34()) {
     jj_scanpos = xsp;
     if (jj_3R_35()) {
     jj_scanpos = xsp;
     if (jj_3R_36()) {
     jj_scanpos = xsp;
-    if (jj_3R_37()) {
-    jj_scanpos = xsp;
-    if (jj_3R_38()) return true;
+    if (jj_3R_37()) return true;
     }
     }
     }
@@ -936,17 +917,17 @@ import java.util.Hashtable;
   }
 
   static private boolean jj_3_7() {
-    if (jj_3R_21()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_6() {
-    if (jj_3R_19()) return true;
     if (jj_3R_20()) return true;
     return false;
   }
 
-  static private boolean jj_3R_20() {
+  static private boolean jj_3_6() {
+    if (jj_3R_18()) return true;
+    if (jj_3R_19()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_19() {
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
@@ -956,22 +937,17 @@ import java.util.Hashtable;
   }
 
   static private boolean jj_3R_49() {
-    if (jj_scan_token(Double)) return true;
+    if (jj_scan_token(Real)) return true;
     return false;
   }
 
   static private boolean jj_3R_57() {
-    if (jj_3R_20()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_17() {
-    if (jj_3R_30()) return true;
+    if (jj_3R_19()) return true;
     return false;
   }
 
   static private boolean jj_3_5() {
-    if (jj_3R_16()) return true;
+    if (jj_3R_15()) return true;
     return false;
   }
 
@@ -997,8 +973,13 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3R_18() {
-    if (jj_3R_33()) return true;
+  static private boolean jj_3R_43() {
+    if (jj_scan_token(NUMDEC)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_17() {
+    if (jj_3R_32()) return true;
     if (jj_scan_token(ID)) return true;
     return false;
   }
@@ -1010,22 +991,22 @@ import java.util.Hashtable;
 
   static private boolean jj_3_4() {
     if (jj_scan_token(OPCOMA)) return true;
-    if (jj_3R_18()) return true;
+    if (jj_3R_17()) return true;
     return false;
   }
 
-  static private boolean jj_3R_32() {
+  static private boolean jj_3R_31() {
     if (jj_3R_46()) return true;
     return false;
   }
 
-  static private boolean jj_3R_17() {
-    if (jj_3R_18()) return true;
+  static private boolean jj_3R_16() {
+    if (jj_3R_17()) return true;
     return false;
   }
 
   static private boolean jj_3_3() {
-    if (jj_3R_17()) return true;
+    if (jj_3R_16()) return true;
     return false;
   }
 
@@ -1035,17 +1016,17 @@ import java.util.Hashtable;
   }
 
   static private boolean jj_3R_46() {
-    if (jj_3R_33()) return true;
+    if (jj_3R_32()) return true;
     if (jj_scan_token(ID)) return true;
     return false;
   }
 
-  static private boolean jj_3R_43() {
+  static private boolean jj_3R_42() {
     if (jj_scan_token(NUM)) return true;
     return false;
   }
 
-  static private boolean jj_3R_33() {
+  static private boolean jj_3R_32() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_47()) {
@@ -1063,7 +1044,7 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3R_34() {
+  static private boolean jj_3R_33() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(20)) {
@@ -1073,16 +1054,9 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3R_16() {
-    if (jj_3R_33()) return true;
-    if (jj_scan_token(ID)) return true;
-    if (jj_3R_34()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_19() {
+  static private boolean jj_3_18() {
     if (jj_scan_token(OPCOMA)) return true;
-    if (jj_3R_22()) return true;
+    if (jj_3R_21()) return true;
     if (jj_3R_45()) return true;
     return false;
   }
@@ -1091,39 +1065,41 @@ import java.util.Hashtable;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3_19()) { jj_scanpos = xsp; break; }
+      if (jj_3_18()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
   static private boolean jj_3R_15() {
+    if (jj_3R_32()) return true;
+    if (jj_scan_token(ID)) return true;
+    if (jj_3R_33()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_30() {
+    if (jj_3R_21()) return true;
+    if (jj_3R_45()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_14() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_2()) {
     jj_scanpos = xsp;
-    if (jj_3R_32()) return true;
+    if (jj_3R_31()) return true;
     }
     return false;
   }
 
   static private boolean jj_3_2() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_31() {
-    if (jj_3R_22()) return true;
-    if (jj_3R_45()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1() {
     if (jj_3R_15()) return true;
     return false;
   }
 
-  static private boolean jj_3_18() {
-    if (jj_3R_31()) return true;
+  static private boolean jj_3_17() {
+    if (jj_3R_30()) return true;
     return false;
   }
 
@@ -1131,12 +1107,17 @@ import java.util.Hashtable;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3_18()) { jj_scanpos = xsp; break; }
+      if (jj_3_17()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3R_30() {
+  static private boolean jj_3_1() {
+    if (jj_3R_14()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_29() {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(PARIZ)) return true;
     if (jj_3R_63()) return true;
@@ -1144,30 +1125,33 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3R_29() {
+  static private boolean jj_3R_28() {
     Token xsp;
     xsp = jj_scanpos;
+    if (jj_3R_41()) {
+    jj_scanpos = xsp;
     if (jj_3R_42()) {
     jj_scanpos = xsp;
     if (jj_3R_43()) {
     jj_scanpos = xsp;
-    if (jj_3_17()) {
+    if (jj_3_16()) {
     jj_scanpos = xsp;
     if (jj_3R_44()) return true;
     }
     }
     }
+    }
     return false;
   }
 
-  static private boolean jj_3R_42() {
+  static private boolean jj_3R_41() {
     if (jj_scan_token(PARIZ)) return true;
-    if (jj_3R_22()) return true;
+    if (jj_3R_21()) return true;
     if (jj_scan_token(PARDER)) return true;
     return false;
   }
 
-  static private boolean jj_3R_28() {
+  static private boolean jj_3R_27() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(35)) {
@@ -1177,10 +1161,19 @@ import java.util.Hashtable;
     return false;
   }
 
-  static private boolean jj_3_16() {
+  static private boolean jj_3_15() {
+    if (jj_3R_27()) return true;
     if (jj_3R_28()) return true;
-    if (jj_3R_29()) return true;
     if (jj_3R_62()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_62() {
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3_15()) { jj_scanpos = xsp; break; }
+    }
     return false;
   }
 
@@ -1207,9 +1200,9 @@ import java.util.Hashtable;
       jj_la1_0 = new int[] {0x34000,0x34000,0x1100000,0x34000,0x4000,0x1000000,0x1000a800,0xc0500000,0xc0400000,0x40000,0x0,0x0,0x80400000,0x40000000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x3e0,0x6,0x18,0x0,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,0x3e0,0x6,0x18,0x1,0x0,};
    }
-  static final private JJCalls[] jj_2_rtns = new JJCalls[19];
+  static final private JJCalls[] jj_2_rtns = new JJCalls[18];
   static private boolean jj_rescan = false;
   static private int jj_gc = 0;
 
@@ -1458,7 +1451,7 @@ import java.util.Hashtable;
 
   static private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 19; i++) {
+    for (int i = 0; i < 18; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -1483,7 +1476,6 @@ import java.util.Hashtable;
             case 15: jj_3_16(); break;
             case 16: jj_3_17(); break;
             case 17: jj_3_18(); break;
-            case 18: jj_3_19(); break;
           }
         }
         p = p.next;

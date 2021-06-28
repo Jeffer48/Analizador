@@ -7,10 +7,14 @@
 int gcd(void)
 {
 	int a;
+	real d;
 	int b[3];
 	int c[4];
 
 	b[2] = 3;
 	c[4] = 2;
+	
+	d = 3.5;
+
 	return a;
 }
