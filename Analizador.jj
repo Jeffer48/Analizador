@@ -337,7 +337,7 @@ void var() :{String id = "";}
 
 void varPre(String id) :{}
 {
-    (LOOKAHEAD(2) <CORIZ> expression() {int v=Integer.parseInt(""+HA.get(id))-1; if(v < Integer.parseInt(valor)) System.out.println("NullPointerException");} <CORDER>)*
+    (LOOKAHEAD(2) <CORIZ> expression() {int v=Integer.parseInt(""+HA.get(id))-1; if(v < Integer.parseInt(valor)) System.out.println("NullPointerException, arreglo: "+v+", "+valor);} <CORDER>)*
 }
 
 void simpleExpression() :{}
