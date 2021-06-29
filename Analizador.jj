@@ -248,9 +248,9 @@ void paramlistPrima() :{}
     (LOOKAHEAD(2) <OPCOMA> param() paramlistPrima())*
 }
 
-void param() :{}
+void param() :{String type = ""; String id = "";}
 {
-    typespecifer() <ID> paramPre()
+    type=typespecifer() <ID> {id=token.image; if(HT.containsKey(id)) System.out.println("La variable ya existe"); HT.put(id, type);} paramPre()
 }
 
 void paramPre() :{}
@@ -323,8 +323,8 @@ void expression() :{}
     LOOKAHEAD(8) var() <OPASIG> expression() 
     {
         String t = ""+HT.get(idA);
-        if(t.equals("real")&&valor.contains(".")){double t2=Double.parseDouble(valor); HA.replace(idA,t2);}
-        else if(t.equals("int")&&!valor.contains(".")){int t2=Integer.parseInt(valor); HA.replace(idA,t2);}
+        if(t.equals("real")&&valor.contains(".")){double t2=Double.parseDouble(valor);}
+        else if(t.equals("int")&&!valor.contains(".")){int t2=Integer.parseInt(valor);}
         else{System.out.println("Tipos de variables incompatibles");}
     } | 
     simpleExpression()
@@ -332,12 +332,18 @@ void expression() :{}
 
 void var() :{String id = "";}
 {
-    <ID> {id=token.image; idA=id;} varPre(id)
+    <ID> {id=token.image; idA=id; if(!HT.containsKey(idA))System.out.println("La variable "+idA+" no existe");} varPre(id)
 }
 
 void varPre(String id) :{}
 {
-    (LOOKAHEAD(2) <CORIZ> expression() {int v=Integer.parseInt(""+HA.get(id))-1; if(v < Integer.parseInt(valor)) System.out.println("NullPointerException, arreglo: "+v+", "+valor);} <CORDER>)*
+    (LOOKAHEAD(2) <CORIZ> expression() <CORDER> {
+        int v=Integer.parseInt(""+HA.get(id))-1;
+
+        if(v < Integer.parseInt(valor)){
+            System.out.println("NullPointerException, arreglo: "+v+", "+valor);
+        } 
+    })*
 }
 
 void simpleExpression() :{}
@@ -380,9 +386,9 @@ void termPrima() :{}
     (LOOKAHEAD(2) mulop() factor() termPrima())*
 }
 
-void mulop() :{}
+String mulop() :{}
 {
-    <OPMULTIPLICA> | <OPDIV>
+    <OPMULTIPLICA> {return "*";} | <OPDIV> {return "/";}
 }
 
 void factor() :{}

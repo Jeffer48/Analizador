@@ -25,7 +25,7 @@ void main(void)
         h = 9/8.3*i+x[4]; //expresion solo debe contener enteros
     }
     x[6] = 8.9; //el arreglo es de tipo entero
-    h=7.9;  /h es de tipo entero
+    h=7.9;  //h es de tipo entero
     i=gcd(5,6);//la funcion regresa un int , i es real  
     h=suma(9.3);//la funcion regresa un real, h es int
     x[14] = 8; //excede el tamano del arreglo
